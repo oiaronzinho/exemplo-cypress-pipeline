@@ -2,6 +2,7 @@ name: Testes Cypress Agendados
 
 on:
   workflow_dispatch:
+
   schedule:
     - cron: '0 21 * * *'
       timezone: 'America/Sao_Paulo'
@@ -19,11 +20,14 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: exemplo-cypress-pipeline/package-lock.json
 
       - name: Instalar dependências
+        working-directory: exemplo-cypress-pipeline
         run: npm ci
 
       - name: Executar os testes Cypress
+        working-directory: exemplo-cypress-pipeline
         run: npm test
 
       - name: Salvar evidências em caso de falha
@@ -32,6 +36,6 @@ jobs:
         with:
           name: evidencias-cypress
           path: |
-            cypress/screenshots
-            cypress/videos
+            exemplo-cypress-pipeline/cypress/screenshots
+            exemplo-cypress-pipeline/cypress/videos
           if-no-files-found: ignore
